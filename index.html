@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Page</title>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD82WxueDBFTOCTv03q1UGcSKI3uYdrCu4",
+            authDomain: "samvaadatest.firebaseapp.com",
+            projectId: "samvaadatest",
+            storageBucket: "samvaadatest.appspot.com",
+            messagingSenderId: "411652965756",
+            appId: "1:411652965756:web:d36a0d889b77367b9b10f9",
+            measurementId: "G-K4B9LP6YG8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('dataForm');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const imageURL = document.getElementById('imageURL').value;
+                const name = document.getElementById('name').value;
+                const linkURL = document.getElementById('linkURL').value;
+                
+                const cardData = { imageURL, name, linkURL };
+                const newCardKey = push(ref(database, 'cards')).key;
+                set(ref(database, 'cards/' + newCardKey), cardData).then(() => {
+                    window.location.href = 'newpage.html';
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="dataForm">
+        <label for="imageURL">Image URL:</label>
+        <input type="text" id="imageURL" name="imageURL" required><br><br>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="linkURL">Link URL:</label>
+        <input type="text" id="linkURL" name="linkURL" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

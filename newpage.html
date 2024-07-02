@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Page</title>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD82WxueDBFTOCTv03q1UGcSKI3uYdrCu4",
+            authDomain: "samvaadatest.firebaseapp.com",
+            projectId: "samvaadatest",
+            storageBucket: "samvaadatest.appspot.com",
+            messagingSenderId: "411652965756",
+            appId: "1:411652965756:web:d36a0d889b77367b9b10f9",
+            measurementId: "G-K4B9LP6YG8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const cardContainer = document.getElementById('cardContainer');
+
+            onValue(ref(database, 'cards'), (snapshot) => {
+                cardContainer.innerHTML = '';
+                const cards = snapshot.val();
+                for (let key in cards) {
+                    const cardData = cards[key];
+                    
+                    const card = document.createElement('div');
+                    card.className = 'card';
+
+                    const img = document.createElement('img');
+                    img.src = cardData.imageURL;
+                    card.appendChild(img);
+
+                    const name = document.createElement('h2');
+                    name.textContent = cardData.name;
+                    card.appendChild(name);
+
+                    const button = document.createElement('button');
+                    button.textContent = 'Visit';
+                    button.onclick = function() {
+                        window.location.href = cardData.linkURL;
+                    };
+                    card.appendChild(button);
+
+                    cardContainer.appendChild(card);
+                }
+            });
+        });
+    </script>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px;
+            width: 200px;
+            text-align: center;
+        }
+        .card img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        .card button {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .card button:hover {
+            background-color: #005f6b;
+        }
+    </style>
+</head>
+<body>
+    <div id="cardContainer"></div>
+</body>
+</html>
